@@ -28,7 +28,7 @@ class SortBy extends Component {
 
     handleRequestClose = (cat) => {
         switch(cat){
-            case '0':
+            case 0:
                 this.setState({ open: false });
                 break;
             default:
@@ -60,8 +60,8 @@ class SortBy extends Component {
                     open={this.state.open}
                     onRequestClose={() => (this.handleRequestClose(0))}
                 >
-                    <MenuItem onClick={() => (this.handleRequestClose('Time'))}>Time</MenuItem>
-                    <MenuItem onClick={() => (this.handleRequestClose('Votes'))}>Votes</MenuItem>
+                    <MenuItem onClick={() => (this.handleRequestClose('Time'))}>TIME</MenuItem>
+                    <MenuItem onClick={() => (this.handleRequestClose('Votes'))}>VOTES</MenuItem>
                 </Menu>
             </div>
         );

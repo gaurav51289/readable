@@ -23,31 +23,29 @@ class Controls extends Component{
     render(){
         const { classes } = this.props;
         return (
-            <Grid container>
-                <Grid itm md={2}/>
-                <Grid item md={8}>
+            <Grid container justify="center">
+                <Grid item xs={12} md={6}>
                     <Paper className={classes.root} elevation={4}>
-                        <Grid container spacing={0}>
-                            <Grid item md={3}>
-                                <Typography type="headline" align="center" component="h3">
+                        <Grid container >
+                            <Grid item xs={8} md={3}>
+                                <Typography type="title" align="center">
                                    Select Post Category:
                                 </Typography>
                             </Grid>
-                            <Grid item md={3}>
+                            <Grid item xs={4} md={3}>
                                 <CategorySelector/>
                             </Grid>
-                            <Grid item md={3}>
-                                <Typography type="headline" align="center" component="h3">
+                            <Grid item xs={8} md={3}>
+                                <Typography type="title" align="center">
                                     Sort Posts By:
                                 </Typography>
                             </Grid>
-                            <Grid item md={3}>
+                            <Grid item xs={4} md={3}>
                                 <SortBy/>
                             </Grid>
                         </Grid>
                     </Paper>
                 </Grid>
-                <Grid itm md={2}/>
             </Grid>
         );
     }

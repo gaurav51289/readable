@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
+
+import * as API from '../../APIs/API';
+import {filterPostByCategory} from "../../Actions/PostActions";
 
 const styles = theme => ({
     root: {
@@ -14,10 +18,23 @@ const styles = theme => ({
 class CategorySelector extends Component {
 
     state = {
+        categories: [{ name : 'all'}],
         anchorEl: null,
         open: false,
-        selected: 'All'
+        selected: 'all'
     };
+
+    componentDidMount(){
+        API.getAllCategories().then((resJSON) => {
+            if(resJSON){
+                let categories = resJSON.categories;
+                this.setState((state) => {
+                    state.categories = state.categories.concat(categories);
+                    return state;
+                });
+            }
+        });
+    }
 
     handleClick = event => {
         this.setState({ open: true, anchorEl: event.currentTarget });
@@ -25,7 +42,7 @@ class CategorySelector extends Component {
 
     handleRequestClose = (cat) => {
         switch(cat){
-            case '0':
+            case 0:
                 this.setState({ open: false });
                 break;
             default:
@@ -33,6 +50,7 @@ class CategorySelector extends Component {
                     open: false,
                     selected: cat
                 });
+                this.props.changeCategory(cat);
                 break;
         }
     };
@@ -56,10 +74,11 @@ class CategorySelector extends Component {
                     open={this.state.open}
                     onRequestClose={() => (this.handleRequestClose(0))}
                 >
-                    <MenuItem onClick={() => (this.handleRequestClose('All'))}>All</MenuItem>
-                    <MenuItem onClick={() => (this.handleRequestClose('React'))}>React</MenuItem>
-                    <MenuItem onClick={() => (this.handleRequestClose('Redux'))}>Redux</MenuItem>
-                    <MenuItem onClick={() => (this.handleRequestClose('Udacity'))}>Udacity</MenuItem>
+                    {
+                        this.state.categories.map((category) => (
+                            <MenuItem key={category.name} onClick={() => (this.handleRequestClose(category.name))}>{(category.name).toUpperCase()}</MenuItem>
+                        ))
+                    }
                 </Menu>
             </div>
         );
@@ -70,4 +89,10 @@ CategorySelector.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(CategorySelector);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeCategory: (category) => dispatch(filterPostByCategory(category))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(withStyles(styles)(CategorySelector));

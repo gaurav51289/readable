@@ -25,9 +25,11 @@ class App extends Component {
     render() {
         return (
             <MuiThemeProvider theme={App.theme}>
-                <NavBar/>
-                <Controls/>
-                <Posts/>
+                <div>
+                    <NavBar/>
+                    <Controls/>
+                    <Posts/>
+                </div>
             </MuiThemeProvider>
         );
     }
