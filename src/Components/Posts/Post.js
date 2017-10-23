@@ -93,7 +93,7 @@ class Post extends React.Component {
                             >
                                 <DeleteForeverIcon/>
                             </IconButton>
-                            <EditPost/>
+                            <EditPost post={post}/>
                             <div className={classes.flexGrow}/>
                             <IconButton
                                 className={classnames(classes.expand, {

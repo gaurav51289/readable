@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
 
-import { filteredPosts } from "./PostReducer";
+import { postData } from "./PostReducer";
 
 
 export default combineReducers({
-    filteredPosts
+    postData: postData
 });

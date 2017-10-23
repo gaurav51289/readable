@@ -2,7 +2,7 @@ import {
     FETCH_POSTS_SUCCESS,
     FILTER_POSTS,
     SORT_POSTS,
-    ADD_POST, DELETE_POST, VOTE_CHANGE
+    ADD_POST, DELETE_POST, VOTE_CHANGE, EDIT_POST
 } from "../Actions/PostActions";
 
 const allPosts = {
@@ -12,7 +12,7 @@ const allPosts = {
 };
 
 
-export function filteredPosts(state = allPosts, action) {
+export function postData(state = allPosts, action) {
     switch (action.type) {
         case FETCH_POSTS_SUCCESS:
             return {
@@ -55,6 +55,20 @@ export function filteredPosts(state = allPosts, action) {
                         ...post,
                         voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1
                     };
+                })
+            };
+        case EDIT_POST:
+            return{
+                ...state,
+                posts: state.posts.map((post) => {
+                    if(post.id !== action.postId){
+                        return post;
+                    }
+                    return{
+                        ...post,
+                        title: action.title,
+                        body: action.body
+                    }
                 })
             };
         default:

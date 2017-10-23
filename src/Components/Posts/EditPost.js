@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import EditIcon from 'material-ui-icons/Edit';
 import TextField from 'material-ui/TextField';
 import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle,} from 'material-ui/Dialog';
-import {FormControl, FormLabel} from 'material-ui/Form';
 import {withStyles} from 'material-ui/styles';
+import PropTypes from 'prop-types';
+import {putEditPost} from "../../Actions/PostActions";
 
 
-import CategorySelector from '../Controls/CategorySelector';
 
 const styles = theme => ({
     button: {
@@ -23,29 +24,17 @@ const styles = theme => ({
 class EditPost extends Component {
     state = {
         open: false,
-        post: {
-            title: "",
-            body: "",
-            category: "all"
-        }
+        post: this.props.post
     };
 
     handleClickOpen = () => {
         this.setState({open: true});
     };
 
-    handleRequestClose = (doPost) => {
-        if (doPost) {
-            //TODO: post
-
-            this.setState((state) => {
-                state.post = {
-                    title: "",
-                    body: "",
-                    category: "all"
-                };
-                return state;
-            });
+    handleRequestClose = (doEditPost) => {
+        if (doEditPost) {
+            const {id, title, body} = this.state.post;
+            this.props.doEditPost(id, title, body);
         }
         this.setState({open: false});
     };
@@ -61,15 +50,7 @@ class EditPost extends Component {
         });
     };
 
-    getSelected = (selected) => {
-        this.setState((state) => {
-            state.post.category = selected;
-            return state;
-        });
-    };
-
     render() {
-        const {classes} = this.props;
         return (
             <div>
                 <IconButton
@@ -78,10 +59,10 @@ class EditPost extends Component {
                     <EditIcon/>
                 </IconButton>
                 <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose(false)}>
-                    <DialogTitle>New Post</DialogTitle>
+                    <DialogTitle>Edit Post</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Write a new Post...
+                            Make changes in the Post and Save...
                         </DialogContentText>
                         <TextField
                             autoFocus
@@ -93,14 +74,6 @@ class EditPost extends Component {
                             value={this.state.post.title}
                             onChange={(event) => this.handleTextFieldChange(event)}
                         />
-                        <FormControl component="fieldset" className={classes.formControl}>
-                            <FormLabel className={classes.categorySelector}>Category</FormLabel>
-                            <CategorySelector
-                                getSelected={this.getSelected}
-                                selected={this.state.post.category}
-                                noFilter={true}/>
-                        </FormControl>
-
                         <TextField
                             autoFocus
                             multiline
@@ -118,7 +91,7 @@ class EditPost extends Component {
                             Cancel
                         </Button>
                         <Button onClick={() => this.handleRequestClose(true)} color="primary">
-                            Post
+                            Save
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -127,5 +100,16 @@ class EditPost extends Component {
     }
 }
 
+EditPost.propTypes = {
+    classes: PropTypes.object.isRequired,
+    post: PropTypes.object.isRequired
+};
 
-export default withStyles(styles)(EditPost);
+
+const mapDispatchToProp = (dispatch) => {
+    return {
+        doEditPost: (postId, title, body) => dispatch(putEditPost(postId, title, body))
+    }
+};
+
+export default connect(null, mapDispatchToProp)(withStyles(styles)(EditPost));

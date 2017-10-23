@@ -24,7 +24,7 @@ class NewPost extends Component {
     state = {
         open: false,
         post: {
-            id: Date.now(),
+            id: Date.now().toString(),
             timestamp: Date.now(),
             author: 'thingthree',
             voteScore: 1,
@@ -45,6 +45,7 @@ class NewPost extends Component {
 
             this.setState((state) => {
                 state.post = {
+                    ...state.post,
                     title: "",
                     body: "",
                     category: "all"

@@ -34,6 +34,23 @@ export const getAllPosts = () => {
         });
 };
 
+export const getPostById = (postId) => {
+    let url = URL + '/posts/' + postId;
+    return fetch(url, {
+        headers: {'Authorization': 'fijdahuofhpriohashufhdsajlfh'}
+    }).then((response) => {
+        if (response.status === 200) {
+            return response;
+        } else {
+            throw Error(response.status + " : " + response.statusText);
+        }
+    }).then((response) => response.json())
+        .catch((error) => {
+            console.log(error);
+            return false;
+        });
+};
+
 export const postAddPost = (post) => {
     let url = URL + '/posts';
     return fetch(url, {
@@ -94,6 +111,27 @@ export const postVoteChange = (postId, vote) => {
         }
     }).then((response) => response.json())
         .catch((error) => {
+            console.log(error);
+            return false;
+        });
+};
+
+export const putEditPost = (postId, title, body) => {
+    let url = URL + '/posts/' + postId;
+    return fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'fijdahuofhpriohashufhdsajlfh',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title, body})
+    }).then((response) => {
+        if (response.status === 200) {
+            return response;
+        } else {
+            throw Error(response.status + " : " + response.statusText);
+        }
+    }).catch((error) => {
             console.log(error);
             return false;
         });
