@@ -82,7 +82,10 @@ class Post extends React.Component {
 
                         </CardContent>
                         <CardActions>
-                            <Votes votes={post.voteScore}/>
+                            <Votes
+                                votes={post.voteScore}
+                                postId={post.id}
+                            />
                         </CardActions>
                         <CardActions disableActionSpacing>
                             <IconButton

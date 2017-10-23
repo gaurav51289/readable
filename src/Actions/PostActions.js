@@ -5,6 +5,7 @@ export const FILTER_POSTS = 'FILTER_POSTS';
 export const SORT_POSTS = 'SORT_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const VOTE_CHANGE = 'VOTE_CHANGE';
 
 
 export const fetchPostsSuccess = (posts) => {
@@ -42,6 +43,14 @@ export const deletePost = (postId) => {
     }
 };
 
+export const voteChange = (postId, vote) => {
+    return {
+        type: VOTE_CHANGE,
+        postId,
+        vote
+    }
+};
+
 export const getAllPostData = () => {
     return (dispatch) => {
         API.getAllPosts().then((posts) => dispatch(fetchPostsSuccess(posts)));
@@ -57,5 +66,11 @@ export const postAddPost = (post) => {
 export const postDeletePost = (postId) => {
     return (dispatch) => {
         API.postDeletePost(postId).then(() => dispatch(deletePost(postId)));
+    }
+};
+
+export const postVoteChange = (postId, vote) => {
+    return (dispatch) => {
+        API.postVoteChange(postId,vote).then(() => dispatch(voteChange(postId, vote)));
     }
 };

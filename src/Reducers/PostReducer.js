@@ -2,7 +2,7 @@ import {
     FETCH_POSTS_SUCCESS,
     FILTER_POSTS,
     SORT_POSTS,
-    ADD_POST, DELETE_POST
+    ADD_POST, DELETE_POST, VOTE_CHANGE
 } from "../Actions/PostActions";
 
 const allPosts = {
@@ -41,6 +41,21 @@ export function filteredPosts(state = allPosts, action) {
             return{
                 ...state,
                 posts: state.posts.filter((post) => !(post.id === action.postId))
+            };
+        case VOTE_CHANGE:
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+
+                    if(post.id !== action.postId){
+                        return post;
+                    }
+
+                    return {
+                        ...post,
+                        voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1
+                    };
+                })
             };
         default:
             return state;
