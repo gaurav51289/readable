@@ -1,11 +1,13 @@
 import {
     FETCH_POSTS_SUCCESS,
-    FILTER_POSTS
+    FILTER_POSTS,
+    SORT_POSTS
 } from "../Actions/PostActions";
 
 const allPosts = {
     posts: [],
-    filterBy: 'all'
+    filterBy: 'all',
+    sortBy: 'votes'
 };
 
 
@@ -21,6 +23,12 @@ export function filteredPosts(state = allPosts, action) {
             return {
                 ...state,
                 filterBy: action.category
+            };
+
+        case SORT_POSTS:
+            return {
+                ...state,
+                sortBy: action.sort
             };
 
         default:

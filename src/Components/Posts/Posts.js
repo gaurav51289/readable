@@ -65,16 +65,26 @@ Posts.propTypes = {
 
 const mapStateToProps = (state) => {
 
-    const {posts, filterBy} = state.filteredPosts;
+    const {posts, filterBy, sortBy} = state.filteredPosts;
+
+    let filteredPosts = posts.filter((post) => {
+        if(filterBy === 'all'){
+            return post;
+        } else {
+            return post.category === filterBy;
+        }
+    });
+
+    let sortedPosts = filteredPosts.sort((a, b) => {
+        if(sortBy === 'time'){
+            return b.timestamp - a.timestamp;
+        } else {
+            return b.voteScore - a.voteScore;
+        }
+    });
 
     return {
-        posts: posts.filter((post) => {
-            if(filterBy === 'all'){
-                return post;
-            } else {
-                return post.category === filterBy;
-            }
-        })
+        posts : sortedPosts
     };
 };
 

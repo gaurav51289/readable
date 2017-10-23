@@ -6,7 +6,7 @@ import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 
 import * as API from '../../APIs/API';
-import {filterPostByCategory} from "../../Actions/PostActions";
+import {filterPostsByCategory} from "../../Actions/PostActions";
 
 const styles = theme => ({
     root: {
@@ -91,7 +91,7 @@ CategorySelector.propTypes = {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeCategory: (category) => dispatch(filterPostByCategory(category))
+        changeCategory: (category) => dispatch(filterPostsByCategory(category))
     };
 };
 
