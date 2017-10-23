@@ -9,9 +9,9 @@ import {withStyles} from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
 
 import Post from './Post';
+import NewPost from "./NewPost";
 
 const styles = theme => ({
     root: theme.mixins.gutters({
@@ -44,7 +44,7 @@ class Posts extends Component {
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} md={6}>
-                                <Button raised color="primary" className={classes.button}>New Post</Button>
+                                <NewPost/>
                             </Grid>
                         </Grid>
                         {

@@ -33,3 +33,45 @@ export const getAllPosts = () => {
             return false;
         });
 };
+
+export const postAddPost = (post) => {
+    let url = URL + '/posts';
+    return fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': 'fijdahuofhpriohashufhdsajlfh',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(post)
+    }).then((response) => {
+        if (response.status === 200) {
+            return response;
+        } else {
+            throw Error(response.status + " : " + response.statusText);
+        }
+    }).then((response) => response.json())
+        .catch((error) => {
+            console.log(error);
+            return false;
+        });
+};
+
+export const postDeletePost = (postId) => {
+    let url = URL + '/posts/' + postId;
+    return fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': 'fijdahuofhpriohashufhdsajlfh'
+        }
+    }).then((response) => {
+        if (response.status === 200) {
+            return response;
+        } else {
+            throw Error(response.status + " : " + response.statusText);
+        }
+    }).then((response) => response.json())
+        .catch((error) => {
+            console.log(error);
+            return false;
+        });
+};

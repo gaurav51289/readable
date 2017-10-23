@@ -3,6 +3,8 @@ import * as API from '../APIs/API';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FILTER_POSTS = 'FILTER_POSTS';
 export const SORT_POSTS = 'SORT_POSTS';
+export const ADD_POST = 'ADD_POST';
+export const DELETE_POST = 'DELETE_POST';
 
 
 export const fetchPostsSuccess = (posts) => {
@@ -26,8 +28,34 @@ export const sortPosts = (sort) => {
     }
 };
 
+export const addPost = (post) => {
+    return {
+        type: ADD_POST,
+        post
+    }
+};
+
+export const deletePost = (postId) => {
+    return {
+        type: DELETE_POST,
+        postId
+    }
+};
+
 export const getAllPostData = () => {
     return (dispatch) => {
         API.getAllPosts().then((posts) => dispatch(fetchPostsSuccess(posts)));
+    }
+};
+
+export const postAddPost = (post) => {
+    return (dispatch) => {
+        API.postAddPost(post).then(() => dispatch(addPost(post)));
+    }
+};
+
+export const postDeletePost = (postId) => {
+    return (dispatch) => {
+        API.postDeletePost(postId).then(() => dispatch(deletePost(postId)));
     }
 };

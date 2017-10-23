@@ -21,7 +21,7 @@ class CategorySelector extends Component {
         categories: [{ name : 'all'}],
         anchorEl: null,
         open: false,
-        selected: 'all'
+        selected: this.props.selected
     };
 
     componentDidMount(){
@@ -50,10 +50,15 @@ class CategorySelector extends Component {
                     open: false,
                     selected: cat
                 });
-                this.props.changeCategory(cat);
+                if(!this.props.noFilter){
+                    this.props.changeCategory(cat);
+                } else {
+                    this.props.getSelected(cat);
+                }
                 break;
         }
     };
+
 
 
     render() {
@@ -87,6 +92,8 @@ class CategorySelector extends Component {
 
 CategorySelector.propTypes = {
     classes: PropTypes.object.isRequired,
+    getSelected: PropTypes.func,
+    selected: PropTypes.string.isRequired
 };
 
 const mapDispatchToProps = (dispatch) => {

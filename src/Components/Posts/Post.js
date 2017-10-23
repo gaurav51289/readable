@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import classnames from 'classnames';
@@ -11,12 +12,12 @@ import IconButton from 'material-ui/IconButton';
 import Typography from 'material-ui/Typography';
 import red from 'material-ui/colors/red';
 import DeleteForeverIcon from 'material-ui-icons/DeleteForever';
-import EditIcon from 'material-ui-icons/Edit';
 import CommentIcon from 'material-ui-icons/Comment';
 
-
+import EditPost from './EditPost';
 import Comment from './Comment';
 import Votes from './Votes';
+import {postDeletePost} from "../../Actions/PostActions";
 
 
 const styles = theme => ({
@@ -84,12 +85,12 @@ class Post extends React.Component {
                             <Votes votes={post.voteScore}/>
                         </CardActions>
                         <CardActions disableActionSpacing>
-                            <IconButton aria-label="Add to favorites">
+                            <IconButton
+                                onClick={() => this.props.doDeletePost(post.id)}
+                            >
                                 <DeleteForeverIcon/>
                             </IconButton>
-                            <IconButton aria-label="Share">
-                                <EditIcon/>
-                            </IconButton>
+                            <EditPost/>
                             <div className={classes.flexGrow}/>
                             <IconButton
                                 className={classnames(classes.expand, {
@@ -129,4 +130,9 @@ Post.propTypes = {
     post : PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Post);
+const mapDispatchToProp = (dispatch) => {
+    return {
+        doDeletePost: (postId) => dispatch(postDeletePost(postId))
+    }
+};
+export default connect(null, mapDispatchToProp)(withStyles(styles)(Post));

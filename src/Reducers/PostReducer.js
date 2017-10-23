@@ -1,7 +1,8 @@
 import {
     FETCH_POSTS_SUCCESS,
     FILTER_POSTS,
-    SORT_POSTS
+    SORT_POSTS,
+    ADD_POST, DELETE_POST
 } from "../Actions/PostActions";
 
 const allPosts = {
@@ -31,6 +32,16 @@ export function filteredPosts(state = allPosts, action) {
                 sortBy: action.sort
             };
 
+        case ADD_POST:
+            return{
+                ...state,
+                posts: state.posts.concat(action.post)
+            };
+        case DELETE_POST:
+            return{
+                ...state,
+                posts: state.posts.filter((post) => !(post.id === action.postId))
+            };
         default:
             return state;
     }

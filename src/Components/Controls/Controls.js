@@ -33,7 +33,7 @@ class Controls extends Component{
                                 </Typography>
                             </Grid>
                             <Grid item xs={4} md={3}>
-                                <CategorySelector/>
+                                <CategorySelector selected="all"/>
                             </Grid>
                             <Grid item xs={8} md={3}>
                                 <Typography type="title" align="center">
