@@ -10,11 +10,7 @@ export const getAllCategories = () => {
         } else {
             throw Error(response.status + " : " + response.statusText);
         }
-    }).then((response) => response.json())
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
+    }).then((response) => response.json());
 };
 
 export const getAllPosts = () => {
@@ -27,28 +23,7 @@ export const getAllPosts = () => {
         } else {
             throw Error(response.status + " : " + response.statusText);
         }
-    }).then((response) => response.json())
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
-};
-
-export const getPostById = (postId) => {
-    let url = URL + '/posts/' + postId;
-    return fetch(url, {
-        headers: {'Authorization': 'fijdahuofhpriohashufhdsajlfh'}
-    }).then((response) => {
-        if (response.status === 200) {
-            return response;
-        } else {
-            throw Error(response.status + " : " + response.statusText);
-        }
-    }).then((response) => response.json())
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
+    }).then((response) => response.json());
 };
 
 export const postAddPost = (post) => {
@@ -66,11 +41,7 @@ export const postAddPost = (post) => {
         } else {
             throw Error(response.status + " : " + response.statusText);
         }
-    }).then((response) => response.json())
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
+    }).then((response) => response.json());
 };
 
 export const postDeletePost = (postId) => {
@@ -86,11 +57,7 @@ export const postDeletePost = (postId) => {
         } else {
             throw Error(response.status + " : " + response.statusText);
         }
-    }).then((response) => response.json())
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
+    }).then((response) => response.json());
 };
 
 
@@ -109,11 +76,7 @@ export const postVoteChange = (postId, vote) => {
         } else {
             throw Error(response.status + " : " + response.statusText);
         }
-    }).then((response) => response.json())
-        .catch((error) => {
-            console.log(error);
-            return false;
-        });
+    }).then((response) => response.json());
 };
 
 export const putEditPost = (postId, title, body) => {
@@ -131,8 +94,5 @@ export const putEditPost = (postId, title, body) => {
         } else {
             throw Error(response.status + " : " + response.statusText);
         }
-    }).catch((error) => {
-            console.log(error);
-            return false;
-        });
+    });
 };

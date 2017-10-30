@@ -1,4 +1,6 @@
-import * as API from '../APIs/API';
+import * as PostAPI from '../APIs/PostsAPI';
+import * as CommentAPI from '../APIs/CommentsAPI';
+import {errorOccured} from "./UIActions";
 
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FILTER_POSTS = 'FILTER_POSTS';
@@ -7,6 +9,7 @@ export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const VOTE_CHANGE = 'VOTE_CHANGE';
 export const EDIT_POST = 'EDIT_POST';
+export const ADD_COMMENTS = 'ADD_COMMENTS';
 
 
 export const fetchPostsSuccess = (posts) => {
@@ -61,32 +64,87 @@ export const editPost = (postId, title, body) => {
     }
 };
 
+export const addComments = (postId, comments) => {
+    return {
+        type: ADD_COMMENTS,
+        postId,
+        comments
+    }
+};
+
 export const getAllPostData = () => {
     return (dispatch) => {
-        API.getAllPosts().then((posts) => dispatch(fetchPostsSuccess(posts)));
+        PostAPI.getAllPosts()
+            .then((posts) => {
+                dispatch(fetchPostsSuccess(posts));
+                return posts;
+            })
+            .then((posts) => {
+                posts.map((post) => dispatch(getCommentsForPost(post.id)));
+            })
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured());
+            });
     }
 };
 
 export const postAddPost = (post) => {
     return (dispatch) => {
-        API.postAddPost(post).then(() => dispatch(addPost(post)));
+        PostAPI.postAddPost(post)
+            .then(() => dispatch(addPost(post)))
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured());
+            });
     }
 };
 
 export const postDeletePost = (postId) => {
     return (dispatch) => {
-        API.postDeletePost(postId).then(() => dispatch(deletePost(postId)));
+        PostAPI.postDeletePost(postId)
+            .then(() => dispatch(deletePost(postId)))
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured());
+            });
     }
 };
 
 export const postVoteChange = (postId, vote) => {
     return (dispatch) => {
-        API.postVoteChange(postId,vote).then(() => dispatch(voteChange(postId, vote)));
+        PostAPI.postVoteChange(postId,vote)
+            .then(() => dispatch(voteChange(postId, vote)))
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured());
+            });
     }
 };
 
 export const putEditPost = (postId, title, body) => {
     return (dispatch) => {
-        API.putEditPost(postId, title, body).then(() => dispatch(editPost(postId, title, body)));
+        PostAPI.putEditPost(postId, title, body)
+            .then(() => dispatch(editPost(postId, title, body)))
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured());
+            });
+    }
+};
+
+
+
+
+export const getCommentsForPost = (postId) => {
+    return (dispatch) => {
+        CommentAPI.getCommentsForPost(postId)
+            .then((comments) => {
+                dispatch(addComments(postId, comments))
+            })
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured());
+            });
     }
 };

@@ -65,9 +65,13 @@ Posts.propTypes = {
 
 const mapStateToProps = (state) => {
 
-    const {posts, filterBy, sortBy} = state.postData;
+    let { posts, filterBy, sortBy } = state.postData;
 
-    let filteredPosts = posts.filter((post) => {
+    let postsArr = Object.keys(posts).map((postId) => {
+        return posts[postId];
+    });
+
+    let filteredPosts = postsArr.filter((post) => {
         if(filterBy === 'all'){
             return post;
         } else {

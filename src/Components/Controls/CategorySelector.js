@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import Menu, { MenuItem } from 'material-ui/Menu';
+import Menu, {MenuItem} from 'material-ui/Menu';
 
-import * as API from '../../APIs/API';
+import * as API from '../../APIs/PostsAPI';
 import {filterPostsByCategory} from "../../Actions/PostActions";
 
 const styles = theme => ({
@@ -18,39 +18,25 @@ const styles = theme => ({
 class CategorySelector extends Component {
 
     state = {
-        categories: [{ name : 'all'}],
+        categories: [{name: 'all'}],
         anchorEl: null,
         open: false,
         selected: this.props.selected
     };
-
-    componentDidMount(){
-        API.getAllCategories().then((resJSON) => {
-            if(resJSON){
-                let categories = resJSON.categories;
-                this.setState((state) => {
-                    state.categories = state.categories.concat(categories);
-                    return state;
-                });
-            }
-        });
-    }
-
     handleClick = event => {
-        this.setState({ open: true, anchorEl: event.currentTarget });
+        this.setState({open: true, anchorEl: event.currentTarget});
     };
-
     handleRequestClose = (cat) => {
-        switch(cat){
+        switch (cat) {
             case 0:
-                this.setState({ open: false });
+                this.setState({open: false});
                 break;
             default:
                 this.setState({
                     open: false,
                     selected: cat
                 });
-                if(!this.props.noFilter){
+                if (!this.props.noFilter) {
                     this.props.changeCategory(cat);
                 } else {
                     this.props.getSelected(cat);
@@ -59,7 +45,19 @@ class CategorySelector extends Component {
         }
     };
 
-
+    componentDidMount() {
+        API.getAllCategories()
+            .then((resJSON) => {
+                if (resJSON) {
+                    let categories = resJSON.categories;
+                    this.setState((state) => {
+                        state.categories = state.categories.concat(categories);
+                        return state;
+                    });
+                }
+            })
+            .catch((error) => console.log(error));
+    }
 
     render() {
         const {classes} = this.props;
@@ -81,7 +79,8 @@ class CategorySelector extends Component {
                 >
                     {
                         this.state.categories.map((category) => (
-                            <MenuItem key={category.name} onClick={() => (this.handleRequestClose(category.name))}>{(category.name).toUpperCase()}</MenuItem>
+                            <MenuItem key={category.name}
+                                      onClick={() => (this.handleRequestClose(category.name))}>{(category.name).toUpperCase()}</MenuItem>
                         ))
                     }
                 </Menu>

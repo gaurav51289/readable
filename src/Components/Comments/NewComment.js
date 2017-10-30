@@ -3,12 +3,9 @@ import {connect} from 'react-redux';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import Dialog, {DialogActions, DialogContent, DialogContentText, DialogTitle,} from 'material-ui/Dialog';
-import {FormControl, FormLabel} from 'material-ui/Form';
 import {withStyles} from 'material-ui/styles';
 
-
-import CategorySelector from '../Controls/CategorySelector';
-import {postAddPost} from "../../Actions/PostActions";
+import {postAddComment} from "../../Actions/CommentActions";
 
 const styles = theme => ({
     button: {
@@ -20,18 +17,18 @@ const styles = theme => ({
     }
 });
 
-class NewPost extends Component {
+class NewComment extends Component {
     state = {
         open: false,
-        post: {
+        comment: {
             id: Date.now().toString(),
             timestamp: Date.now(),
-            author: 'PostGuy',
-            voteScore: 1,
-            deleted: false,
-            title: "",
+            parentId: this.props.post.id,
             body: "",
-            category: "all"
+            author: 'CommentGuy',
+            deleted: false,
+            parentDeleted: false,
+            voteScore: 1
         }
     };
 
@@ -39,16 +36,16 @@ class NewPost extends Component {
         this.setState({open: true});
     };
 
-    handleRequestClose = (doPost) => {
-        if (doPost) {
-            this.props.doAddPost(this.state.post);
+    handleRequestClose = (doPostComment) => {
+        if (doPostComment) {
+            let postId = this.props.post.id;
+            let comments = new Array(this.state.comment);
+            this.props.doAddComment(postId, comments);
 
             this.setState((state) => {
                 state.post = {
                     ...state.post,
-                    title: "",
-                    body: "",
-                    category: "all"
+                    body: ""
                 };
                 return state;
             });
@@ -62,63 +59,41 @@ class NewPost extends Component {
         const id = target.id;
 
         this.setState((state) => {
-            state.post[id] = value;
-            return state;
-        });
-    };
-
-    getSelected = (selected) => {
-        this.setState((state) => {
-            state.post.category = selected;
+            state.comment[id] = value;
             return state;
         });
     };
 
     render() {
-        const {classes} = this.props;
+        const {classes, post} = this.props;
         return (
             <div>
                 <Button
-                    raised
-                    color="primary"
-                    className={classes.button}
+                    className={classes.button} dense raised
                     onClick={this.handleClickOpen}
                 >
-                    New Post
+                    New Comment
                 </Button>
                 <Dialog open={this.state.open} onRequestClose={() => this.handleRequestClose(false)}>
-                    <DialogTitle>New Post</DialogTitle>
+                    <DialogTitle>New Comment</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Write a new Post...
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="title"
-                            label="Post Title"
-                            type="text"
-                            fullWidth
-                            value={this.state.post.title}
-                            onChange={(event) => this.handleTextFieldChange(event)}
-                        />
-                        <FormControl component="fieldset" className={classes.formControl}>
-                            <FormLabel className={classes.categorySelector}>Category</FormLabel>
-                            <CategorySelector
-                                getSelected={this.getSelected}
-                                selected={this.state.post.category}
-                                noFilter={true}/>
-                        </FormControl>
+                            Write a new Comment for the post...
+                            <br/>
+                            <strong>{post.title}</strong>
+                            <br/>
+                            <i>{post.body}</i>
 
+                        </DialogContentText>
                         <TextField
                             autoFocus
                             multiline
                             margin="dense"
                             id="body"
-                            label="Description"
+                            label="Your Comment..."
                             type="text"
                             fullWidth
-                            value={this.state.post.body}
+                            value={this.state.comment.body}
                             onChange={(event) => this.handleTextFieldChange(event)}
                         />
                     </DialogContent>
@@ -139,8 +114,8 @@ class NewPost extends Component {
 
 const mapDispatchToProp = (dispatch) => {
     return {
-        doAddPost : (post) => dispatch(postAddPost(post))
+        doAddComment : (postId, comments) => dispatch(postAddComment(postId, comments))
     }
 };
 
-export default connect(null, mapDispatchToProp)(withStyles(styles)(NewPost));
+export default connect(null, mapDispatchToProp)(withStyles(styles)(NewComment));

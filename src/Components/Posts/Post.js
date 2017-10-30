@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import Card, {CardActions, CardContent, CardHeader} from 'material-ui/Card';
 import Grid from 'material-ui/Grid';
 import Collapse from 'material-ui/transitions/Collapse';
-import Button from 'material-ui/Button';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import Typography from 'material-ui/Typography';
@@ -15,8 +14,9 @@ import DeleteForeverIcon from 'material-ui-icons/DeleteForever';
 import CommentIcon from 'material-ui-icons/Comment';
 
 import EditPost from './EditPost';
-import Comment from './Comment';
+import Comment from '../Comments/Comment';
 import Votes from './Votes';
+import NewComment from '../Comments/NewComment';
 import {postDeletePost} from "../../Actions/PostActions";
 
 
@@ -53,7 +53,15 @@ class Post extends React.Component {
     };
 
     render() {
-        const {classes, post} = this.props;
+        const {classes, post, commentData} = this.props;
+
+        let commentsArr =
+            post.commentIds
+            && post.commentIds
+            .map((commentId) => commentData[commentId])
+                .sort((a, b) => {
+                    return b.voteScore - a.voteScore;
+                });
 
         return (
             <Grid container>
@@ -85,6 +93,7 @@ class Post extends React.Component {
                             <Votes
                                 votes={post.voteScore}
                                 postId={post.id}
+                                type={'POST'}
                             />
                         </CardActions>
                         <CardActions disableActionSpacing>
@@ -115,10 +124,14 @@ class Post extends React.Component {
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={6} md={6}>
-                                        <Button className={classes.button} dense raised>New Comment</Button>
+                                        <NewComment post={post}/>
                                     </Grid>
                                 </Grid>
-                                <Comment/>
+                                {
+                                    commentsArr && commentsArr.map((comment) => (
+                                        <Comment key={comment.id} comment={comment}/>
+                                    ))
+                                }
                             </CardContent>
                         </Collapse>
                     </Card>
@@ -133,9 +146,16 @@ Post.propTypes = {
     post : PropTypes.object.isRequired
 };
 
+const mapStateToProp = (state) => {
+    let {commentData} = state;
+    return {
+        commentData
+    }
+};
+
 const mapDispatchToProp = (dispatch) => {
     return {
         doDeletePost: (postId) => dispatch(postDeletePost(postId))
     }
 };
-export default connect(null, mapDispatchToProp)(withStyles(styles)(Post));
+export default connect(mapStateToProp, mapDispatchToProp)(withStyles(styles)(Post));

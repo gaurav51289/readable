@@ -2,11 +2,19 @@ import {
     FETCH_POSTS_SUCCESS,
     FILTER_POSTS,
     SORT_POSTS,
-    ADD_POST, DELETE_POST, VOTE_CHANGE, EDIT_POST
+    ADD_POST,
+    DELETE_POST,
+    VOTE_CHANGE,
+    EDIT_POST,
+    ADD_COMMENTS
 } from "../Actions/PostActions";
 
+import {
+    DELETE_COMMENT
+} from "../Actions/CommentActions";
+
 const allPosts = {
-    posts: [],
+    posts: {},
     filterBy: 'all',
     sortBy: 'votes'
 };
@@ -17,7 +25,10 @@ export function postData(state = allPosts, action) {
         case FETCH_POSTS_SUCCESS:
             return {
                 ...state,
-                posts: action.posts
+                posts: action.posts.reduce((obj, post) => {
+                    obj[post.id] = post;
+                    return obj;
+                }, state.posts)
             };
 
         case FILTER_POSTS:
@@ -35,42 +46,86 @@ export function postData(state = allPosts, action) {
         case ADD_POST:
             return{
                 ...state,
-                posts: state.posts.concat(action.post)
+                posts: {
+                    ...state.posts,
+                    [action.post.id]: action.post
+                }
             };
+
         case DELETE_POST:
+            let newPosts = state.posts;
+            delete newPosts[action.postId];
             return{
                 ...state,
-                posts: state.posts.filter((post) => !(post.id === action.postId))
+                posts: newPosts
             };
+
         case VOTE_CHANGE:
             return {
                 ...state,
-                posts: state.posts.map((post) => {
-
-                    if(post.id !== action.postId){
-                        return post;
+                posts: {
+                    ...state.posts,
+                    [action.postId]:{
+                        ...state.posts[action.postId],
+                        voteScore: action.vote === 'upVote' ?
+                            state.posts[action.postId].voteScore + 1 :
+                            state.posts[action.postId].voteScore - 1
                     }
-
-                    return {
-                        ...post,
-                        voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1
-                    };
-                })
+                }
             };
+
         case EDIT_POST:
             return{
                 ...state,
-                posts: state.posts.map((post) => {
-                    if(post.id !== action.postId){
-                        return post;
-                    }
-                    return{
-                        ...post,
+                posts: {
+                    ...state.posts,
+                    [action.postId]: {
+                        ...state.posts[action.postId],
                         title: action.title,
                         body: action.body
                     }
-                })
+                }
             };
+
+        case ADD_COMMENTS:
+            if(!state.posts.commentIds){
+                return{
+                    ...state,
+                    posts: {
+                        ...state.posts,
+                        [action.postId]: {
+                            ...state.posts[action.postId],
+                            commentIds: action.comments.map((comment) => (comment.id))
+                        }
+                    }
+                };
+            } else {
+                return{
+                    ...state,
+                    posts: {
+                        ...state.posts,
+                        [action.postId]: {
+                            ...state.posts[action.postId],
+                            commentIds: state.posts[action.postId].commentIds.concat(action.comments.map((comment) => comment.id))
+                        }
+                    }
+                };
+            }
+
+
+        case DELETE_COMMENT:
+            console.log(action.postId);
+            return {
+                ...state,
+                posts: {
+                    ...state.posts,
+                    [action.postId]: {
+                        ...state.posts[action.postId],
+                        commentIds: state.posts[action.postId].commentIds.filter((commentId) => (commentId !== action.commentId))
+                    }
+                }
+            };
+
         default:
             return state;
     }
