@@ -3,7 +3,6 @@ import * as CommentAPI from '../APIs/CommentsAPI';
 import {errorOccured} from "./UIActions";
 
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
-export const FILTER_POSTS = 'FILTER_POSTS';
 export const SORT_POSTS = 'SORT_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
@@ -16,13 +15,6 @@ export const fetchPostsSuccess = (posts) => {
     return {
         type: FETCH_POSTS_SUCCESS,
         posts
-    }
-};
-
-export const filterPostsByCategory = (category) => {
-    return {
-        type: FILTER_POSTS,
-        category
     }
 };
 
@@ -72,9 +64,9 @@ export const addComments = (postId, comments) => {
     }
 };
 
-export const getAllPostData = () => {
+export const getAllPostData = (category) => {
     return (dispatch) => {
-        PostAPI.getAllPosts()
+        PostAPI.getAllPosts(category)
             .then((posts) => {
                 dispatch(fetchPostsSuccess(posts));
                 return posts;

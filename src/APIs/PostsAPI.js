@@ -13,8 +13,16 @@ export const getAllCategories = () => {
     }).then((response) => response.json());
 };
 
-export const getAllPosts = () => {
-    let url = URL + '/posts';
+export const getAllPosts = (category) => {
+
+    let url = URL;
+
+    if(category === 'all'){
+        url = url + '/posts'
+    } else {
+        url = url + '/' + category + '/posts'
+    }
+
     return fetch(url, {
         headers: {'Authorization': 'fijdahuofhpriohashufhdsajlfh'}
     }).then((response) => {

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Menu, {MenuItem} from 'material-ui/Menu';
 
 import * as API from '../../APIs/PostsAPI';
-import {filterPostsByCategory} from "../../Actions/PostActions";
 
 const styles = theme => ({
     root: {
@@ -37,7 +36,7 @@ class CategorySelector extends Component {
                     selected: cat
                 });
                 if (!this.props.noFilter) {
-                    this.props.changeCategory(cat);
+                    (cat === 'all')? this.props.history.push('/') : this.props.history.push('/'+cat);
                 } else {
                     this.props.getSelected(cat);
                 }
@@ -95,10 +94,5 @@ CategorySelector.propTypes = {
     selected: PropTypes.string.isRequired
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeCategory: (category) => dispatch(filterPostsByCategory(category))
-    };
-};
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(CategorySelector));
+export default withRouter((withStyles(styles)(CategorySelector)));

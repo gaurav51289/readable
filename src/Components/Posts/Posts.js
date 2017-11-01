@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-
 import {connect} from 'react-redux';
 import {getAllPostData} from "../../Actions/PostActions";
 
@@ -28,11 +27,12 @@ const styles = theme => ({
 class Posts extends Component {
 
     componentDidMount() {
-        this.props.fetchPostsData();
+        this.props.fetchPostsData(this.props.category);
     }
 
     render() {
         const {classes, posts} = this.props;
+
         return (
             <Grid container justify="center">
                 <Grid item xs={12} md={8}>
@@ -61,25 +61,18 @@ class Posts extends Component {
 
 Posts.propTypes = {
     classes: PropTypes.object.isRequired,
+    category: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state) => {
 
-    let { posts, filterBy, sortBy } = state.postData;
+    let { posts, sortBy } = state.postData;
 
     let postsArr = Object.keys(posts).map((postId) => {
         return posts[postId];
     });
 
-    let filteredPosts = postsArr.filter((post) => {
-        if(filterBy === 'all'){
-            return post;
-        } else {
-            return post.category === filterBy;
-        }
-    });
-
-    let sortedPosts = filteredPosts.sort((a, b) => {
+    let sortedPosts = postsArr.sort((a, b) => {
         if(sortBy === 'time'){
             return b.timestamp - a.timestamp;
         } else {
@@ -94,9 +87,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchPostsData: () => dispatch(getAllPostData())
+        fetchPostsData: (category) => dispatch(getAllPostData(category))
     };
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Posts));
+export default (connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Posts)));

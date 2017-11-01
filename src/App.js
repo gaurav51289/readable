@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {Route} from "react-router-dom";
+
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import purple from 'material-ui/colors/purple';
 import green from 'material-ui/colors/green';
@@ -28,7 +30,20 @@ class App extends Component {
                 <div>
                     <NavBar/>
                     <Controls/>
-                    <Posts/>
+                    <Route
+                        exact
+                        path="/"
+                        render={() => {
+                            return(<Posts category={'all'}/>);
+                        }}
+                    />
+                    <Route
+                        exact
+                        path="/:category"
+                        render={({match}) => {
+                            return(<Posts category={match.params.category}/>);
+                        }}
+                    />
                 </div>
             </MuiThemeProvider>
         );

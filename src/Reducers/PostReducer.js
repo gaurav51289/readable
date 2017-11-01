@@ -1,6 +1,5 @@
 import {
     FETCH_POSTS_SUCCESS,
-    FILTER_POSTS,
     SORT_POSTS,
     ADD_POST,
     DELETE_POST,
@@ -15,7 +14,6 @@ import {
 
 const allPosts = {
     posts: {},
-    filterBy: 'all',
     sortBy: 'votes'
 };
 
@@ -28,13 +26,7 @@ export function postData(state = allPosts, action) {
                 posts: action.posts.reduce((obj, post) => {
                     obj[post.id] = post;
                     return obj;
-                }, state.posts)
-            };
-
-        case FILTER_POSTS:
-            return {
-                ...state,
-                filterBy: action.category
+                }, {})
             };
 
         case SORT_POSTS:
