@@ -39,23 +39,9 @@ class App extends Component {
                     />
                     <Route
                         exact
-                        path="/redux"
-                        render={() => {
-                            return(<Posts category={'redux'}/>);
-                        }}
-                    />
-                    <Route
-                        exact
-                        path="/react"
-                        render={() => {
-                            return(<Posts category={'react'}/>);
-                        }}
-                    />
-                    <Route
-                        exact
-                        path="/udacity"
-                        render={() => {
-                            return(<Posts category={'udacity'}/>);
+                        path="/:category"
+                        render={({match}) => {
+                            return(<Posts category={match.params.category}/>);
                         }}
                     />
                 </div>

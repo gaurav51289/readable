@@ -30,6 +30,12 @@ class Posts extends Component {
         this.props.fetchPostsData(this.props.category);
     }
 
+    componentWillReceiveProps(newProps){
+        if(newProps.category !== this.props.category){
+            this.props.fetchPostsData(newProps.category);
+        }
+    }
+
     render() {
         const {classes, posts} = this.props;
 
