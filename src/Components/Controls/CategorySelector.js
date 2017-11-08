@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Menu, {MenuItem} from 'material-ui/Menu';
 
-import * as API from '../../APIs/PostsAPI';
+import {getAllCategories} from "../../Actions/UIActions";
 
 const styles = theme => ({
     root: {
@@ -17,11 +18,15 @@ const styles = theme => ({
 class CategorySelector extends Component {
 
     state = {
-        categories: [{name: 'all'}],
         anchorEl: null,
         open: false,
         selected: this.props.selected
     };
+
+    componentDidMount() {
+        this.props.getAllCategories(this.props.categories);
+    }
+
     handleClick = event => {
         this.setState({open: true, anchorEl: event.currentTarget});
     };
@@ -44,20 +49,6 @@ class CategorySelector extends Component {
         }
     };
 
-    componentDidMount() {
-        API.getAllCategories()
-            .then((resJSON) => {
-                if (resJSON) {
-                    let categories = resJSON.categories;
-                    this.setState((state) => {
-                        state.categories = state.categories.concat(categories);
-                        return state;
-                    });
-                }
-            })
-            .catch((error) => console.log(error));
-    }
-
     render() {
         const {classes} = this.props;
         return (
@@ -77,7 +68,7 @@ class CategorySelector extends Component {
                     onRequestClose={() => (this.handleRequestClose(0))}
                 >
                     {
-                        this.state.categories.map((category) => (
+                        this.props.categories.map((category) => (
                             <MenuItem key={category.name}
                                       onClick={() => (this.handleRequestClose(category.name))}>{(category.name).toUpperCase()}</MenuItem>
                         ))
@@ -95,4 +86,18 @@ CategorySelector.propTypes = {
 };
 
 
-export default withRouter((withStyles(styles)(CategorySelector)));
+const mSP = (state) => {
+    const {categories} = state;
+
+    return {
+        categories
+    }
+};
+
+const mDP = (dispatch) => {
+    return {
+        getAllCategories: (categories) => dispatch(getAllCategories(categories))
+    }
+};
+
+export default connect(mSP, mDP)(withRouter((withStyles(styles)(CategorySelector))));
