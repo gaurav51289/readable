@@ -120,7 +120,7 @@ class Post extends React.Component {
                                 <Grid container>
                                     <Grid item xs={6} md={6}>
                                         <Typography paragraph type="title">
-                                            Comments
+                                            {commentsArr? `${commentsArr.length} ${(commentsArr.length > 1)? 'Comments': 'Comment'}`: '0 Comment' }
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={6} md={6}>
