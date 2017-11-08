@@ -44,7 +44,8 @@ class NewComment extends Component {
 
             this.setState((state) => {
                 state.post = {
-                    ...state.post,
+                    ...state.comment,
+                    id: '',
                     body: ""
                 };
                 return state;

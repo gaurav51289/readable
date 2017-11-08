@@ -21,7 +21,7 @@ class Controls extends Component{
 
 
     render(){
-        const { classes } = this.props;
+        const { classes, category } = this.props;
         return (
             <Grid container justify="center">
                 <Grid item xs={12} md={6}>
@@ -33,7 +33,7 @@ class Controls extends Component{
                                 </Typography>
                             </Grid>
                             <Grid item xs={4} md={3}>
-                                <CategorySelector selected="all"/>
+                                <CategorySelector selected={category}/>
                             </Grid>
                             <Grid item xs={8} md={3}>
                                 <Typography type="title" align="center">

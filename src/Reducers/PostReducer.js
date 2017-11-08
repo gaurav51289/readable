@@ -80,7 +80,7 @@ export function postData(state = allPosts, action) {
             };
 
         case ADD_COMMENTS:
-            if(!state.posts.commentIds){
+            if(!state.posts[action.postId].commentIds){
                 return{
                     ...state,
                     posts: {
@@ -106,7 +106,6 @@ export function postData(state = allPosts, action) {
 
 
         case DELETE_COMMENT:
-            console.log(action.postId);
             return {
                 ...state,
                 posts: {

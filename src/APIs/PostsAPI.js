@@ -34,6 +34,28 @@ export const getAllPosts = (category) => {
     }).then((response) => response.json());
 };
 
+export const getPost = (category, postId) => {
+
+    let url = `${URL}/posts/${postId}`;
+
+    return fetch(url, {
+        headers: {'Authorization': 'fijdahuofhpriohashufhdsajlfh'}
+    }).then((response) => {
+        if (response.status === 200) {
+            return response.json();
+        } else {
+            throw Error(response.status + " : " + response.statusText);
+        }
+    }).then((resJSON) => {
+        const postCat = resJSON.category;
+        if(postCat !== category){
+            throw Error(`404 : Post not found in category '${category}'`);
+        } else {
+            return resJSON;
+        }
+    });
+};
+
 export const postAddPost = (post) => {
     let url = URL + '/posts';
     return fetch(url, {

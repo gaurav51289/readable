@@ -59,7 +59,7 @@ class CategorySelector extends Component {
                     aria-haspopup="true"
                     onClick={this.handleClick}
                 >
-                    {this.state.selected}
+                    {this.state.selected === 'all' ? 'NO FILTER' : this.state.selected}
                 </Button>
                 <Menu
                     id="simple-menu"
@@ -70,7 +70,9 @@ class CategorySelector extends Component {
                     {
                         this.props.categories.map((category) => (
                             <MenuItem key={category.name}
-                                      onClick={() => (this.handleRequestClose(category.name))}>{(category.name).toUpperCase()}</MenuItem>
+                                      onClick={() => (this.handleRequestClose(category.name))}>
+                                            {(category.name === 'all')? 'NO FILTER' : (category.name).toUpperCase()}
+                            </MenuItem>
                         ))
                     }
                 </Menu>

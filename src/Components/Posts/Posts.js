@@ -38,6 +38,9 @@ class Posts extends Component {
 
     render() {
         const {classes, posts} = this.props;
+        let postRender = posts.map((post) => (
+                <Post key={post.id} post={post}/>
+            ));
 
         return (
             <Grid container justify="center">
@@ -53,11 +56,7 @@ class Posts extends Component {
                                 <NewPost/>
                             </Grid>
                         </Grid>
-                        {
-                            posts.map((post) => (
-                                <Post key={post.id} post={post}/>
-                            ))
-                        }
+                        {postRender}
                     </Paper>
                 </Grid>
             </Grid>

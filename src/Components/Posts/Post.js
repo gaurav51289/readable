@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {withStyles} from 'material-ui/styles';
@@ -82,7 +83,7 @@ class Post extends React.Component {
                         />
                         <CardContent>
                             <Typography type="display1" component="p">
-                                {post.title}
+                                <Link to={`/${post.category}/${post.id}`}>{post.title}</Link>
                             </Typography>
                             <Typography type="subheading" component="p">
                                 {post.body}

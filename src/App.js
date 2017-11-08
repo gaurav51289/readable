@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Route} from "react-router-dom";
+import {Route, withRouter} from "react-router-dom";
+import {connect} from 'react-redux';
 
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import purple from 'material-ui/colors/purple';
@@ -10,6 +11,8 @@ import red from 'material-ui/colors/red';
 import NavBar from './Components/NavBar';
 import Controls from './Components/Controls/Controls';
 import Posts from './Components/Posts/Posts';
+import PostDetails from './Components/Posts/PostDetails';
+import ErrorPage from './Components/ErrorPage';
 
 class App extends Component {
 
@@ -25,29 +28,71 @@ class App extends Component {
     });
 
     render() {
-        return (
-            <MuiThemeProvider theme={App.theme}>
-                <div>
-                    <NavBar/>
-                    <Controls/>
-                    <Route
-                        exact
-                        path="/"
-                        render={() => {
-                            return(<Posts category={'all'}/>);
-                        }}
-                    />
-                    <Route
-                        exact
-                        path="/:category"
-                        render={({match}) => {
-                            return(<Posts category={match.params.category}/>);
-                        }}
-                    />
-                </div>
-            </MuiThemeProvider>
-        );
+        if(this.props.error.error){
+            return (
+                <MuiThemeProvider theme={App.theme}>
+                    <div>
+                        <NavBar/>
+                        <ErrorPage message={this.props.error.message}/>
+                    </div>
+                </MuiThemeProvider>
+            );
+        } else {
+            return (
+                <MuiThemeProvider theme={App.theme}>
+                    <div>
+                        <NavBar/>
+                        <Route
+                            exact
+                            path="/"
+                            render={() => {
+                                return(
+                                    <div>
+                                        <Controls category='all'/>
+                                        <Posts category={'all'}/>
+                                    </div>
+                                );
+                            }}
+                        />
+                        <Route
+                            exact
+                            path="/:category"
+                            render={({match}) => {
+                                return(
+                                    <div>
+                                        <Controls category={match.params.category}/>
+                                        <Posts category={match.params.category}/>
+                                    </div>
+                                );
+                            }}
+                        />
+                        <Route
+                            exact
+                            path="/:category/:postid"
+                            render={({match}) => {
+                                return(
+                                    <PostDetails
+                                        category={match.params.category}
+                                        postid={match.params.postid}
+                                    />
+                                );
+                            }}
+                        />
+                    </div>
+                </MuiThemeProvider>
+            );
+        }
+
+
     }
 }
 
-export default App;
+const mSP = (state) => {
+    const {error} = state;
+    return {
+        error
+    }
+};
+
+
+export default withRouter(connect(mSP, null)(App));

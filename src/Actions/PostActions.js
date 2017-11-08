@@ -81,6 +81,23 @@ export const getAllPostData = (category) => {
     }
 };
 
+export const getPostData = (category, postId) => {
+    return (dispatch) => {
+        PostAPI.getPost(category, postId)
+            .then((post) => {
+                dispatch(addPost(post));
+                return post;
+            })
+            .then((post) => {
+                dispatch(getCommentsForPost(post.id));
+            })
+            .catch((error) => {
+                console.error(error);
+                dispatch(errorOccured(error));
+            });
+    }
+};
+
 export const postAddPost = (post) => {
     return (dispatch) => {
         PostAPI.postAddPost(post)
